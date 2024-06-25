@@ -1,0 +1,65 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+
+module sequence_detector_110(clk,in,out,rst
+
+    );
+    input logic clk,in,rst;
+    output logic out;
+    parameter s0=2'b00,s1=2'b01,s2=2'b10;
+    logic [1:0]cstate,nstate;
+    always@(posedge clk)
+    begin
+    if(rst)
+    begin
+    cstate=s0;
+    nstate=s0;
+    out=0;
+    end
+    else
+    cstate=nstate;
+    end
+    
+    always@(posedge clk)
+    begin
+    case(cstate)
+    s0:begin
+    if(in)
+    begin
+    nstate=s1;
+    out=1'b10;
+    end
+    else
+    begin
+    nstate=s0;
+    out=1'b10;
+    end
+    end
+    s1:begin
+    if(in)
+    begin
+    nstate=s2;
+    out=1'b10;
+    end
+    else
+    begin
+    nstate=s0;
+    out=1'b10;
+    end
+    end
+    s2:begin
+    if(in)
+    begin
+    nstate=s1;
+    out=1'b10;
+    end
+    else
+    begin
+    nstate=s0;
+    out=1'b1;
+    end
+    end
+    endcase
+    end
+    
+endmodule
